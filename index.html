@@ -7,10 +7,15 @@
     <meta name="description" content="Η WebBnb είναι μια ομάδα φοιτητών πληροφορικής που προσφέρει υπερσύγχρονες, αστραπιαίες ιστοσελίδες με τη δύναμη του AI. Εκσυγχρονίζουμε την ελληνική αγορά άμεσα και οικονομικά.">
     <meta name="keywords" content="web design, greece, ai websites, φοιτητές πληροφορικής, ιστοσελίδες, ψηφιοποίηση">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%238B5CF6%22/><text y=%22.9em%22 font-size=%2280%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22 x=%2215%22>W</text></svg>">
+    
+    <!-- AOS Library -->
+    <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" />
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -18,15 +23,18 @@
             theme: {
                 extend: {
                     colors: {
-                        midnight: '#0A0A0A',
-                        accent: '#8B5CF6', // Electric Purple
+                        midnight: '#0A0A0B',
+                        accent: '#8B5CF6',
                         accentHover: '#7C3AED',
-                        glass: 'rgba(255, 255, 255, 0.03)',
-                        glassBorder: 'rgba(255, 255, 255, 0.08)',
+                        surface: '#121214',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         display: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 20px 50px rgba(8, 112, 184, 0.07)',
+                        'accent-soft': '0 20px 40px -10px rgba(139, 92, 246, 0.3)',
                     },
                     borderRadius: {
                         '4xl': '2rem',
@@ -37,180 +45,193 @@
         }
     </script>
     <style>
+        :root {
+            scroll-behavior: smooth;
+        }
         body {
-            background-color: #0A0A0A;
+            background-color: #0A0A0B;
             color: #FFFFFF;
             font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
             overflow-x: hidden;
         }
         .mesh-gradient {
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(263,70%,50%,0.15) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(253,16%,7%,1) 0, transparent 50%);
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(124, 58, 237, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(10, 10, 11, 1) 0%, rgba(10, 10, 11, 1) 100%);
+        }
+        .animated-mesh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(100px);
+            animation: mesh-move 20s infinite alternate;
+        }
+        @keyframes mesh-move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10%, 5%) scale(1.1); }
+        }
+        .glass-header {
+            background: rgba(10, 10, 11, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(139, 92, 246, 0.4);
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 30px 60px -15px rgba(139, 92, 246, 0.25);
+        .text-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        .accent-gradient {
+            background: linear-gradient(135deg, #8B5CF6 0%, #D8B4FE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: minmax(180px, auto);
+            gap: 1.5rem;
         }
-        .text-glow {
-            text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
-        }
-        .btn-glow {
+        .bento-item {
             position: relative;
             overflow: hidden;
         }
-        .btn-glow::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .btn-glow:hover::after {
-            opacity: 1;
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
         }
         .floating {
-            animation: floating 3s ease-in-out infinite;
+            animation: floating 4s ease-in-out infinite;
         }
         @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
         }
-        ::-webkit-scrollbar {
-            width: 6px;
+        .btn-premium {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        ::-webkit-scrollbar-track {
-            background: #0A0A0A;
+        .btn-premium:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.5);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1F1F1F;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8B5CF6;
-        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0A0B; }
+        ::-webkit-scrollbar-thumb { background: #27272A; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8B5CF6; }
     </style>
 </head>
 <body class="mesh-gradient min-h-screen selection:bg-accent selection:text-white">
 
+    <div class="animated-mesh"></div>
+
     <!-- Header/Navbar -->
     <header class="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-6 md:py-6">
-        <nav class="max-w-5xl mx-auto flex items-center justify-between glass-card px-6 py-3 md:px-8 md:py-4 rounded-full">
-            <div class="flex items-center gap-2 md:gap-3">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-accent to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-accent/20">
+        <nav class="max-w-5xl mx-auto flex items-center justify-between glass-header px-6 py-3 md:px-8 md:py-4 rounded-full border border-white/10 shadow-premium" data-aos="fade-down">
+            <div class="flex items-center gap-2 md:gap-3 group cursor-pointer">
+                <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-accent to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-accent/20 group-hover:rotate-12 transition-transform duration-500">
                     <span class="text-white font-display font-bold text-xl md:text-2xl">W</span>
                 </div>
                 <span class="text-xl md:text-2xl font-display font-bold tracking-tighter">Web<span class="text-accent">Bnb</span></span>
             </div>
             
             <div class="hidden md:flex items-center gap-10">
-                <a href="#vision" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-accent transition-all">Όραμα</a>
-                <a href="#philosophy" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-accent transition-all">Αξία</a>
-                <a href="#contact" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-accent transition-all">Επικοινωνία</a>
+                <a href="#vision" class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Όραμα</a>
+                <a href="#philosophy" class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-all">Αξία</a>
+                <a href="#contact" class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-all">Επικοινωνία</a>
             </div>
 
-            <a href="mailto:webbnb.gr@gmail.com" class="bg-white text-black hover:bg-accent hover:text-white w-12 h-12 rounded-full flex items-center justify-center transition-all btn-glow group" aria-label="Email Us">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <a href="mailto:webbnb.gr@gmail.com" class="bg-white text-black hover:bg-accent hover:text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all btn-premium group" aria-label="Email Us">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             </a>
         </nav>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section class="pt-40 pb-20 md:pt-52 md:pb-32 px-6">
-            <div class="max-w-7xl mx-auto text-center">
-                <div class="reveal inline-flex items-center gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full glass-card mb-8 md:mb-10 border-accent/20">
+        <section class="relative pt-44 pb-20 md:pt-60 md:pb-40 px-6 overflow-hidden">
+            <div class="max-w-7xl mx-auto text-center relative z-10">
+                <div class="inline-flex items-center gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full glass-card mb-8 md:mb-12 border-white/10 shadow-premium" data-aos="fade-up">
                     <span class="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-accent"></span>
                     </span>
-                    <span class="text-[9px] md:text-[10px] font-black tracking-[0.2em] uppercase text-accent">The Next Gen of Web Development</span>
+                    <span class="text-[10px] md:text-[11px] font-black tracking-[0.25em] uppercase text-accent">The Next Gen of Web Development</span>
                 </div>
                 
-                <h1 class="reveal text-5xl md:text-8xl lg:text-9xl font-display font-extrabold tracking-tighter mb-8 md:mb-10 leading-[1] md:leading-[0.9]">
+                <h1 class="text-5xl md:text-8xl lg:text-[10rem] font-display font-black tracking-tighter mb-8 md:mb-12 leading-[0.9] text-gradient" data-aos="fade-up" data-aos-delay="100">
                     Επανασχεδιάζουμε<br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">το Ψηφιακό Μέλλον.</span>
+                    <span class="accent-gradient">το Ψηφιακό Μέλλον.</span>
                 </h1>
                 
-                <div class="reveal mb-12 md:mb-16">
-                    <p class="text-xl md:text-3xl font-display font-bold text-white tracking-tight">
-                        Η ψηφιοποίηση της επιχείρησής σας, <span class="text-accent">με μόλις 150 ευρώ.</span>
+                <div class="mb-12 md:mb-20" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-xl md:text-4xl font-display font-bold text-white tracking-tight">
+                        Η ψηφιοποίηση της επιχείρησής σας, <span class="bg-accent/20 px-3 py-1 rounded-lg text-accent border border-accent/20">με μόλις 150 ευρώ.</span>
                     </p>
-                    <p class="text-gray-500 text-xs uppercase tracking-[0.3em] mt-3 md:mt-4 font-black">Premium Site • 150€ • 24h</p>
+                    <p class="text-gray-500 text-[10px] md:text-xs uppercase tracking-[0.4em] mt-6 md:mt-8 font-black opacity-60">Premium Site • 150€ • 24h Delivery</p>
                 </div>
                 
-                <p class="reveal max-w-3xl mx-auto text-lg md:text-2xl text-gray-400 mb-12 md:mb-16 leading-relaxed font-light px-4">
-                    Ομάδα νέων φοιτητών πληροφορικής. Εκσυγχρονίζουμε την αγορά με <span class="text-accent font-bold">AI λύσεις</span> που κάνουν τη διαφορά.
+                <p class="max-w-3xl mx-auto text-lg md:text-2xl text-gray-400 mb-12 md:mb-20 leading-relaxed font-light px-4" data-aos="fade-up" data-aos-delay="300">
+                    Ομάδα νέων φοιτητών πληροφορικής. Εκσυγχρονίζουμε την αγορά με <span class="text-white font-semibold">AI λύσεις</span> που κάνουν τη διαφορά.
                 </p>
                 
-                <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <a href="mailto:webbnb.gr@gmail.com" class="w-full sm:w-auto bg-accent hover:bg-accentHover text-white px-12 py-5 rounded-full text-sm font-black uppercase tracking-widest transition-all btn-glow flex items-center justify-center gap-3">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8" data-aos="fade-up" data-aos-delay="400">
+                    <a href="mailto:webbnb.gr@gmail.com" class="w-full sm:w-auto bg-accent hover:bg-accentHover text-white px-14 py-6 rounded-full text-xs font-black uppercase tracking-[0.2em] transition-all btn-premium flex items-center justify-center gap-4">
                         Άμεση Επικοινωνία
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </a>
-                    <div class="w-full sm:w-auto glass-card text-white px-12 py-5 rounded-full text-sm font-black uppercase tracking-widest border-accent/20">
+                    <div class="w-full sm:w-auto glass-card text-white/50 px-14 py-6 rounded-full text-xs font-black uppercase tracking-[0.2em] border-white/5">
                         Starting at 150€
                     </div>
                 </div>
             </div>
+            
+            <!-- Abstract background elements -->
+            <div class="absolute top-1/4 -left-20 w-96 h-96 bg-accent/20 blur-[120px] rounded-full animate-pulse"></div>
+            <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-purple-600/10 blur-[120px] rounded-full animate-pulse" style="animation-delay: 2s;"></div>
         </section>
 
         <!-- Vision Section -->
-        <section id="vision" class="py-20 md:py-32 px-6">
+        <section id="vision" class="py-24 md:py-40 px-6">
             <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
-                    <div class="reveal">
-                        <h2 class="text-3xl md:text-6xl font-display font-bold mb-8 md:mb-10 leading-tight">
-                            Το Όραμά μας για την <span class="text-accent italic">Ελλάδα του Αύριο.</span>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
+                    <div data-aos="fade-right">
+                        <h2 class="text-3xl md:text-7xl font-display font-bold mb-10 md:mb-14 leading-[1.1] text-gradient">
+                            Το Όραμά μας για την <br/><span class="accent-gradient italic">Ελλάδα του Αύριο.</span>
                         </h2>
-                        <p class="text-gray-400 text-lg md:text-xl mb-10 md:mb-12 font-light leading-relaxed">
-                            Κάθε επιχείρηση αξίζει premium ψηφιακή παρουσία. Ως φοιτητές πληροφορικής, εκμηδενίζουμε το κόστος και το χρόνο με δικά μας <span class="text-white font-medium">AI εργαλεία</span>, χωρίς συμβιβασμούς στην αισθητική.
+                        <p class="text-gray-400 text-lg md:text-2xl mb-12 md:mb-16 font-light leading-relaxed">
+                            Κάθε επιχείρηση αξίζει premium ψηφιακή παρουσία. Ως φοιτητές πληροφορικής, εκμηδενίζουμε το κόστος και το χρόνο με δικά μας <span class="text-white font-medium italic underline decoration-accent/50 underline-offset-8">AI εργαλεία</span>, χωρίς συμβιβασμούς στην αισθητική.
                         </p>
-                        <div class="flex gap-8 md:gap-10">
+                        <div class="flex gap-10 md:gap-14">
                             <div>
-                                <div class="text-3xl md:text-4xl font-display font-bold text-white mb-2">80%</div>
-                                <div class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Online Market</div>
+                                <div class="text-4xl md:text-6xl font-display font-black text-white mb-3 tracking-tighter">80%</div>
+                                <div class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-gray-500 font-black opacity-80">Online Market Potential</div>
                             </div>
-                            <div class="w-px h-10 md:h-12 bg-white/10"></div>
+                            <div class="w-px h-14 md:h-20 bg-white/10"></div>
                             <div>
-                                <div class="text-3xl md:text-4xl font-display font-bold text-accent mb-2">24h</div>
-                                <div class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Delivery Ready</div>
+                                <div class="text-4xl md:text-6xl font-display font-black text-accent mb-3 tracking-tighter">24h</div>
+                                <div class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-gray-500 font-black opacity-80">Delivery Readiness</div>
                             </div>
                         </div>
                     </div>
-                    <div class="reveal relative">
-                        <div class="absolute -inset-4 bg-accent/20 blur-3xl rounded-full"></div>
-                        <div class="relative glass-card aspect-video rounded-3xl overflow-hidden flex items-center justify-center">
-                            <div class="p-12 text-center">
-                                <div class="text-6xl mb-6 floating">🚀</div>
-                                <h3 class="text-2xl font-display font-bold mb-4">Zero Wait Time</h3>
-                                <p class="text-gray-400 font-light">Η τεχνολογία μας επιτρέπει να έχουμε το προσχέδιό σας έτοιμο πριν καν το ζητήσετε.</p>
+                    <div class="relative" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="absolute -inset-10 bg-accent/15 blur-[120px] rounded-full"></div>
+                        <div class="relative glass-card aspect-square md:aspect-video rounded-[3rem] overflow-hidden flex items-center justify-center border-white/5 shadow-premium group">
+                            <div class="p-12 text-center group-hover:scale-105 transition-transform duration-700">
+                                <div class="text-8xl mb-8 floating drop-shadow-2xl">🚀</div>
+                                <h3 class="text-3xl font-display font-bold mb-6 text-white">Zero Wait Time</h3>
+                                <p class="text-gray-400 font-light text-lg">Η τεχνολογία μας επιτρέπει να έχουμε το προσχέδιό σας έτοιμο πριν καν το ζητήσετε.</p>
                             </div>
                         </div>
                     </div>
@@ -218,134 +239,137 @@
             </div>
         </section>
 
-        <!-- Philosophy Section -->
-        <section id="philosophy" class="py-20 md:py-32 px-6 bg-white/[0.02]">
+        <!-- Philosophy Section (Bento Grid) -->
+        <section id="philosophy" class="py-24 md:py-40 px-6 bg-surface/30">
             <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-16 md:mb-24 reveal">
-                    <h2 class="text-3xl md:text-6xl font-display font-bold mb-6">Γιατί εμάς;</h2>
-                    <p class="text-gray-400 text-lg md:text-xl font-light">Η νέα γενιά προγραμματιστών φέρνει νέα στάνταρ.</p>
+                <div class="text-center mb-16 md:mb-28" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-7xl font-display font-bold mb-8 text-gradient">Γιατί εμάς;</h2>
+                    <p class="text-gray-500 text-lg md:text-2xl font-light max-w-2xl mx-auto uppercase tracking-widest opacity-80 text-[11px]">Η νέα γενιά προγραμματιστών φέρνει νέα στάνταρ.</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32">
-                    <!-- Benefit 1 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem]">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-accent rounded-2xl flex items-center justify-center text-white mb-6 md:mb-8 shadow-lg shadow-accent/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <div class="bento-grid mb-24 md:mb-40">
+                    <!-- Bento 1: AI Speed -->
+                    <div class="bento-item glass-card p-10 md:p-14 rounded-[3rem] border-white/5 md:col-span-4 md:row-span-2 group" data-aos="fade-up">
+                        <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-white mb-10 shadow-accent-soft group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-display font-bold mb-4">AI-Driven Speed</h3>
-                        <p class="text-gray-400 leading-relaxed font-light text-sm md:text-base">
-                            AI μοντέλα χτίζουν τη βάση σε δευτερόλεπτα. Εστιάζουμε στη λεπτομέρεια.
+                        <h3 class="text-2xl md:text-4xl font-display font-bold mb-6 text-white">AI-Driven Speed</h3>
+                        <p class="text-gray-400 leading-relaxed font-light text-lg md:text-xl max-w-lg mb-8">
+                            Εκπαιδεύουμε AI μοντέλα να χτίζουν τη βάση της σελίδας σας σε δευτερόλεπτα. Εστιάζουμε μόνο στη λεπτομέρεια που μετράει.
                         </p>
+                        <div class="absolute bottom-0 right-0 p-8 opacity-10 group-hover:opacity-30 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
                     </div>
                     
-                    <!-- Benefit 2 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem]" style="transition-delay: 100ms;">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-white rounded-2xl flex items-center justify-center text-black mb-6 md:mb-8 shadow-lg shadow-white/10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <!-- Bento 2: Innovation -->
+                    <div class="bento-item glass-card p-10 md:p-14 rounded-[3rem] border-white/5 md:col-span-2 md:row-span-1 group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-black mb-8 shadow-premium group-hover:rotate-12 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-display font-bold mb-4">Student Innovation</h3>
-                        <p class="text-gray-400 leading-relaxed font-light text-sm md:text-base">
-                            Ακαδημαϊκή καινοτομία στην πράξη. Σύγχρονες μέθοδοι, χωρίς πρότυπα του παρελθόντος.
+                        <h3 class="text-xl md:text-2xl font-display font-bold mb-4 text-white">Student Innovation</h3>
+                        <p class="text-gray-400 font-light leading-relaxed text-sm md:text-base">
+                            Ακαδημαϊκή καινοτομία στην πράξη. Σύγχρονες μέθοδοι, χωρίς ξεπερασμένα πρότυπα.
                         </p>
                     </div>
-                    
-                    <!-- Benefit 3 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem]" style="transition-delay: 200ms;">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-accent rounded-2xl flex items-center justify-center text-white mb-6 md:mb-8 shadow-lg shadow-accent/30">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+
+                    <!-- Bento 3: Control -->
+                    <div class="bento-item glass-card p-10 md:p-14 rounded-[3rem] border-white/5 md:col-span-2 md:row-span-1 group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-14 h-14 bg-accent/20 rounded-2xl flex items-center justify-center text-accent mb-8 border border-accent/20 group-hover:-translate-y-2 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-display font-bold mb-4">Absolute Control</h3>
-                        <p class="text-gray-400 leading-relaxed font-light text-sm md:text-base">
-                            Απόλυτη ευελιξία σε κάθε αλλαγή. Εσείς έχετε τον τελευταίο λόγο.
+                        <h3 class="text-xl md:text-2xl font-display font-bold mb-4 text-white">Absolute Control</h3>
+                        <p class="text-gray-400 font-light leading-relaxed text-sm md:text-base">
+                            Είμαστε δίπλα σας για κάθε αλλαγή. Η ευελιξία μας είναι το πλεονέκτημά σας.
                         </p>
                     </div>
                 </div>
 
                 <!-- Testimonials -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                     <!-- Review 1 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-l-4 border-l-accent">
-                        <div class="flex gap-1 mb-6">
-                            <span class="text-accent text-lg md:text-xl">★★★★★</span>
+                    <div class="glass-card p-10 md:p-14 rounded-[3.5rem] border-l-8 border-l-accent shadow-premium hover:shadow-accent-soft transition-all duration-500 group" data-aos="fade-up">
+                        <div class="flex gap-1 mb-10">
+                            <span class="text-accent text-xl">★★★★★</span>
                         </div>
-                        <p class="text-base md:text-lg italic font-light text-white mb-8">"Δεν πίστευα ότι με 150€ θα είχα τέτοιο αποτέλεσμα. Η σελίδα μου είναι πιο γρήγορη από ανταγωνιστές που πλήρωσαν χιλιάδες."</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center font-bold text-xs">ΓΠ</div>
+                        <p class="text-lg md:text-2xl italic font-light text-white mb-12 leading-relaxed">"Δεν πίστευα ότι με <span class="text-accent font-bold">150€</span> θα είχα τέτοιο αποτέλεσμα. Η σελίδα μου είναι πιο γρήγορη από ανταγωνιστές που πλήρωσαν χιλιάδες."</p>
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 bg-surface border border-white/5 rounded-2xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-accent transition-colors">ΓΠ</div>
                             <div>
-                                <div class="font-bold text-sm">Γιώργος Π.</div>
-                                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Δικηγόρος</div>
+                                <div class="font-display font-bold text-lg text-white">Γιώργος Π.</div>
+                                <div class="text-[11px] text-gray-500 uppercase tracking-[0.3em] font-black">Δικηγόρος</div>
                             </div>
                         </div>
                     </div>
                     <!-- Review 2 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem]" style="transition-delay: 100ms;">
-                        <div class="flex gap-1 mb-6">
-                            <span class="text-accent text-lg md:text-xl">★★★★★</span>
+                    <div class="glass-card p-10 md:p-14 rounded-[3.5rem] border-white/5 shadow-premium group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex gap-1 mb-10">
+                            <span class="text-white/20 text-xl">★★★★★</span>
                         </div>
-                        <p class="text-base md:text-lg italic font-light text-white mb-8">"Τα παιδιά είναι επαγγελματίες. Μέσα σε 24 ώρες η επιχείρησή μου απέκτησε ψηφιακή ταυτότητα."</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center font-bold text-xs">ΕM</div>
+                        <p class="text-lg md:text-2xl italic font-light text-white mb-12 leading-relaxed">"Τα παιδιά είναι επαγγελματίες. Μέσα σε 24 ώρες η επιχείρησή μου απέκτησε <span class="text-white font-bold underline decoration-accent underline-offset-4">ψηφιακή ταυτότητα</span>."</p>
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 bg-surface border border-white/5 rounded-2xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-accent transition-colors">ΕM</div>
                             <div>
-                                <div class="font-bold text-sm">Ελένη Μ.</div>
-                                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Ιατρός</div>
+                                <div class="font-display font-bold text-lg text-white">Ελένη Μ.</div>
+                                <div class="text-[11px] text-gray-500 uppercase tracking-[0.3em] font-black">Ιατρός</div>
                             </div>
                         </div>
                     </div>
                     <!-- Review 3 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem]" style="transition-delay: 200ms;">
-                        <div class="flex gap-1 mb-6">
-                            <span class="text-accent text-lg md:text-xl">★★★★★</span>
+                    <div class="glass-card p-10 md:p-14 rounded-[3.5rem] border-white/5 shadow-premium group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex gap-1 mb-10">
+                            <span class="text-white/20 text-xl">★★★★★</span>
                         </div>
-                        <p class="text-base md:text-lg italic font-light text-white mb-8">"Εξαιρετική δουλειά και άμεση υποστήριξη. Το site είναι ακριβώς όπως το φαντάστηκα, χωρίς περιττά έξοδα."</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center font-bold text-xs">ΝΚ</div>
+                        <p class="text-lg md:text-2xl italic font-light text-white mb-12 leading-relaxed">"Εξαιρετική δουλειά και άμεση υποστήριξη. Το site είναι ακριβώς όπως το φαντάστηκα, χωρίς περιττά έξοδα."</p>
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 bg-surface border border-white/5 rounded-2xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-accent transition-colors">ΝΚ</div>
                             <div>
-                                <div class="font-bold text-sm">Νίκος Κ.</div>
-                                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Λογιστής</div>
+                                <div class="font-display font-bold text-lg text-white">Νίκος Κ.</div>
+                                <div class="text-[11px] text-gray-500 uppercase tracking-[0.3em] font-black">Λογιστής</div>
                             </div>
                         </div>
                     </div>
                     <!-- Review 4 -->
-                    <div class="reveal glass-card p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem]" style="transition-delay: 300ms;">
-                        <div class="flex gap-1 mb-6">
-                            <span class="text-accent text-lg md:text-xl">★★★★★</span>
+                    <div class="glass-card p-10 md:p-14 rounded-[3.5rem] border-white/5 shadow-premium group" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex gap-1 mb-10">
+                            <span class="text-white/20 text-xl">★★★★★</span>
                         </div>
-                        <p class="text-base md:text-lg italic font-light text-white mb-8">"Η καλύτερη επιλογή για κάθε επαγγελματία που ξεκινάει τώρα. Γρήγορα, οικονομικά και με φοβερή αισθητική."</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center font-bold text-xs">ΑΣ</div>
+                        <p class="text-lg md:text-2xl italic font-light text-white mb-12 leading-relaxed">"Η καλύτερη επιλογή για κάθε επαγγελματία που ξεκινάει τώρα. Γρήγορα, οικονομικά και με φοβερή αισθητική."</p>
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 bg-surface border border-white/5 rounded-2xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-accent transition-colors">ΑΣ</div>
                             <div>
-                                <div class="font-bold text-sm">Άννα Σ.</div>
-                                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Architect</div>
+                                <div class="font-display font-bold text-lg text-white">Άννα Σ.</div>
+                                <div class="text-[11px] text-gray-500 uppercase tracking-[0.3em] font-black">Architect</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
+        
         <!-- Contact Section -->
-        <section id="contact" class="py-20 md:py-40 px-6">
-            <div class="reveal max-w-5xl mx-auto glass-card p-10 md:p-24 rounded-[2.5rem] md:rounded-[4rem] text-center relative overflow-hidden">
-                <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 blur-[100px] rounded-full"></div>
-                <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full"></div>
+        <section id="contact" class="py-24 md:py-48 px-6">
+            <div class="max-w-6xl mx-auto glass-card p-12 md:p-28 rounded-[4rem] md:rounded-[5rem] text-center relative overflow-hidden shadow-premium border-white/5" data-aos="zoom-in">
+                <div class="absolute -top-32 -right-32 w-80 h-80 bg-accent/20 blur-[130px] rounded-full"></div>
+                <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-purple-600/15 blur-[130px] rounded-full"></div>
                 
-                <h2 class="text-4xl md:text-7xl font-display font-bold mb-12 md:mb-16 tracking-tighter">Ας δημιουργήσουμε<br/><span class="text-accent">κάτι σπουδαίο.</span></h2>
+                <h2 class="text-4xl md:text-[6rem] font-display font-black mb-14 md:mb-20 tracking-tighter leading-tight text-gradient">Ας δημιουργήσουμε<br/><span class="accent-gradient">κάτι σπουδαίο.</span></h2>
                 
-                <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-12">
-                    <a href="tel:+306941474174" class="group flex flex-col items-center gap-3 md:gap-4">
-                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl glass-card flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 relative z-10">
+                    <a href="tel:+306941474174" class="group flex flex-col items-center gap-6">
+                        <div class="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] md:rounded-[2.5rem] bg-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500 group-hover:-rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
-                        <span class="text-lg md:text-xl font-display font-bold tracking-tight">+30 694 147 4174</span>
+                        <span class="text-xl md:text-3xl font-display font-bold tracking-tight text-white group-hover:text-accent transition-colors">+30 694 147 4174</span>
                     </a>
                     
-                    <div class="hidden md:block w-px h-20 md:h-24 bg-white/10"></div>
+                    <div class="hidden md:block w-px h-24 md:h-32 bg-white/10"></div>
                     
-                    <a href="mailto:webbnb.gr@gmail.com" class="group flex flex-col items-center gap-3 md:gap-4">
-                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl glass-card flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    <a href="mailto:webbnb.gr@gmail.com" class="group flex flex-col items-center gap-6">
+                        <div class="w-16 h-16 md:w-24 md:h-24 rounded-[2rem] md:rounded-[2.5rem] bg-white/5 border border-white/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500 group-hover:rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </div>
-                        <span class="text-lg md:text-xl font-display font-bold tracking-tight">webbnb.gr@gmail.com</span>
+                        <span class="text-xl md:text-3xl font-display font-bold tracking-tight text-white group-hover:text-accent transition-colors">webbnb.gr@gmail.com</span>
                     </a>
                 </div>
             </div>
@@ -353,52 +377,45 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-20 px-6 border-t border-white/5">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-12 mb-16">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                        <span class="text-white font-display font-bold text-lg">W</span>
+    <footer class="py-24 px-6 border-t border-white/5 bg-midnight relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12 mb-20 md:mb-32">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shadow-accent-soft">
+                        <span class="text-white font-display font-black text-xl">W</span>
                     </div>
-                    <span class="text-2xl font-display font-bold tracking-tighter">Web<span class="text-accent">Bnb</span></span>
+                    <span class="text-3xl font-display font-bold tracking-tighter">Web<span class="text-accent">Bnb</span></span>
                 </div>
                 
-                <div class="flex gap-6 md:gap-12">
-                    <a href="#vision" class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors">Vision</a>
-                    <a href="#philosophy" class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors">Values</a>
-                    <a href="#contact" class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors">Contact</a>
+                <div class="flex flex-wrap justify-center gap-10 md:gap-16">
+                    <a href="#vision" class="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors">Vision</a>
+                    <a href="#philosophy" class="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors">Values</a>
+                    <a href="#contact" class="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors">Contact</a>
                 </div>
             </div>
             
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6 pt-12 border-t border-white/5">
-                <div class="text-[10px] font-bold uppercase tracking-widest text-gray-600">
-                    &copy; 2026 WebBnb - CS Students Initiative.
+            <div class="flex flex-col md:flex-row items-center justify-between gap-10 pt-16 border-t border-white/5 opacity-50">
+                <div class="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-gray-600">
+                    &copy; 2026 WebBnb Agency - Computing Students Hub.
                 </div>
-                <div class="flex items-center gap-8">
-                    <a href="mailto:webbnb.gr@gmail.com" class="text-[10px] font-bold uppercase tracking-widest text-gray-600 hover:text-white transition-colors">Email Us</a>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-gray-600">Built with AI & Passion</span>
+                <div class="flex items-center gap-10">
+                    <a href="mailto:webbnb.gr@gmail.com" class="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-gray-600 hover:text-white transition-colors">Digital Partnership</a>
+                    <span class="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-gray-600">Built with Artificial Intelligence</span>
                 </div>
             </div>
         </div>
+        <div class="absolute bottom-0 right-0 w-full h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
     </footer>
 
+    <!-- AOS Initialization -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
-        // Scroll Reveal Animation
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 150;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-
-        window.addEventListener("scroll", reveal);
-        // Initial check
-        window.addEventListener("load", reveal);
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100,
+            easing: 'ease-out-cubic'
+        });
     </script>
 
 </body>
